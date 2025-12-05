@@ -1,0 +1,54 @@
+# ------------------------------------
+# 🚀 Terraform Files
+# ------------------------------------
+# .terraform/ is the local directory where Terraform stores downloaded provider 
+# plugins and modules. It should not be committed to Git.
+.terraform/
+
+# Terraform state files - these track the real-world infrastructure's state.
+# They are managed via a remote backend (like S3 or a dedicated service) and 
+# should NEVER be committed to Git directly, especially in a team environment.
+*.tfstate
+*.tfstate.*
+# The image shows 'terraform.tfstate' and 'terraform.tfstate.backup' within 
+# the 'backend' folder, so we must exclude them relative to the root:
+backend/*.tfstate
+backend/*.tfstate.*
+
+# Crash log files from Terraform
+crash.log
+log/
+
+# History of inputs from 'terraform console'
+.terraform.console.history
+
+# Files that contain sensitive variables (though it's better to use 
+# environment variables or dedicated secret managers)
+# *.auto.tfvars
+
+# ------------------------------------
+# 💻 IDE/Editor Files (VS Code)
+# ------------------------------------
+# VS Code creates a .vscode folder for workspace-specific settings, 
+# tasks, and launch configurations.
+.vscode/
+
+# ------------------------------------
+# 🔑 Credentials and Inventory
+# ------------------------------------
+# While 'aws_host' and 'ansible.cfg' might be needed for deployment, 
+# if 'aws_host' contains sensitive information (like credentials or specific IPs 
+# that are *not* dynamically provisioned and should be secret), you should 
+# exclude it. For this example, we assume they are *not* sensitive. 
+# If they contain credentials, UNCOMMENT the lines below:
+# ansible.cfg
+# aws_host
+
+# ------------------------------------
+# 📦 OS/General Temporary Files
+# ------------------------------------
+# macOS files
+.DS_Store
+
+# Windows thumbnail database
+Thumbs.db
