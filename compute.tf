@@ -29,40 +29,41 @@ resource "aws_instance" "web_server" {
   tags = {
     Name = "web-server-${random_id.random_node_id[count.index].dec}"
   }
-
-  provisioner "local-exec" {
-    interpreter = ["C:/Program Files/Git/bin/bash.exe", "-c"]
-    command     = "printf '\\n${self.public_ip}' >> aws_host"
-
-  }
-  provisioner "local-exec" {
-    when        = destroy
-    interpreter = ["C:/Program Files/Git/bin/bash.exe", "-c"]
-    command     = "sed -i '/^[0-9]/d' aws_host"
-
-  }
 }
-locals {
-  windows_key_path = "${var.private_key_path}"
-  wsl_key_path     = replace(local.windows_key_path, "C:/Users/urshi_", "~")
-}
-resource "null_resource" "grafana_provisioner" {
-  depends_on = [aws_instance.web_server]
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      host        = aws_instance.web_server[0].public_ip
-      user        = "ubuntu"
-      private_key = file(local.windows_key_path)
-      timeout     = "1m"
-    }
-    inline = ["echo 'connection test successful instance is reachable by ssh'"]
-  }
-  provisioner "local-exec" {
-    interpreter = ["wsl", "bash", "-c"]
-    command     = "ANSIBLE_CONFIG=~/ansible.cfg ansible all --private-key=${local.wsl_key_path} -m ping"
-  }
-}
+
+#   provisioner "local-exec" {
+#     interpreter = ["C:/Program Files/Git/bin/bash.exe", "-c"]
+#     command     = "printf '\\n${self.public_ip}' >> aws_host"
+
+#   }
+#   provisioner "local-exec" {
+#     when        = destroy
+#     interpreter = ["C:/Program Files/Git/bin/bash.exe", "-c"]
+#     command     = "sed -i '/^[0-9]/d' aws_host"
+
+#   }
+# }
+# locals {
+#   windows_key_path = "${var.private_key_path}"
+#   wsl_key_path     = replace(local.windows_key_path, "C:/Users/urshi_", "~")
+# }
+# resource "null_resource" "grafana_provisioner" {
+#   depends_on = [aws_instance.web_server]
+#   provisioner "remote-exec" {
+#     connection {
+#       type        = "ssh"
+#       host        = aws_instance.web_server[0].public_ip
+#       user        = "ubuntu"
+#       private_key = file(local.windows_key_path)
+#       timeout     = "1m"
+#     }
+#     inline = ["echo 'connection test successful instance is reachable by ssh'"]
+#   }
+#   provisioner "local-exec" {
+#     interpreter = ["wsl", "bash", "-c"]
+#     command     = "ANSIBLE_CONFIG=~/ansible.cfg ansible all --private-key=${local.wsl_key_path} -m ping"
+#   }
+# }
 
 
 

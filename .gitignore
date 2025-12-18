@@ -52,3 +52,4 @@ log/
 
 # Windows thumbnail database
 Thumbs.db
+*.pe
