@@ -6,17 +6,15 @@ pipeline {
         TF_CLI_ARGS = '-no-color'
         BRANCH_NAME = "main"
         AWS_DEFAULT_REGION = "us-east-1"
-        
     }
-  
+
     stages {
+
         stage('Hello') {
             steps {
                 echo 'Jenkins Multibranch Pipeline is working!'
             }
         }
- 
-    stages {
 
         stage('Checkout') {
             steps {
@@ -82,9 +80,7 @@ pipeline {
 
         stage('Ansible Configuration (WSL)') {
             steps {
-                bat """
-                wsl ansible-playbook install-monitoring.yml -i dynamic_inventory.ini
-                """
+                bat "wsl ansible-playbook install-monitoring.yml -i dynamic_inventory.ini"
             }
         }
 
@@ -106,7 +102,6 @@ pipeline {
         always {
             bat "if exist dynamic_inventory.ini del dynamic_inventory.ini"
         }
-
         failure {
             bat "terraform destroy -auto-approve -var-file=%BRANCH_NAME%.tfvars || echo Cleanup failed"
         }
