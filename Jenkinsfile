@@ -36,6 +36,10 @@ pipeline {
         }
 
         stage('Validate Apply') {
+            when {
+                beforeInput true
+                branch 'dev'
+            }
             input {
                 message "Do you want to apply this Terraform plan?"
                 ok "Apply"
@@ -72,6 +76,10 @@ pipeline {
         }
 
         stage('Validate Ansible') {
+            when {
+                beforeInput true
+                branch 'dev'
+            }
             input {
                 message "Do you want to run Ansible?"
                 ok "Run Ansible"
